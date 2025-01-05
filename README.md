@@ -1,1 +1,1 @@
-# spring-security-with-oauth2-resourceserver
+# oauth2-resourceserver-with-spring-security

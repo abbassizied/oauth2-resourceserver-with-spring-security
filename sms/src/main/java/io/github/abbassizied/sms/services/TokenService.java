@@ -1,6 +1,6 @@
 package io.github.abbassizied.sms.services;
 
-/*
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -14,11 +14,11 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
-*/
 
-//@Service
+
+@Service
 public class TokenService {
-/*
+
     private final JwtEncoder encoder;
 
     public TokenService(JwtEncoder encoder) {
@@ -38,8 +38,8 @@ public class TokenService {
                 .subject(authentication.getName())
                 .claim("scope", scope)
                 .build();
-        var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS512).build(), claims);
+        var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
         return this.encoder.encode(encoderParameters).getTokenValue();
     }
-*/
+
 }

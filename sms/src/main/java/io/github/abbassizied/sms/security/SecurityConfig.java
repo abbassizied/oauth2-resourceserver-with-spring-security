@@ -3,11 +3,14 @@ package io.github.abbassizied.sms.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService; 
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -39,6 +42,19 @@ public class SecurityConfig {
                         .build());
     }
 
+    
+    // Define the AuthenticationManager bean
+    @SuppressWarnings({ "deprecation", "removal" })
+	@Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService())  // Use the UserDetailsService defined above
+                .passwordEncoder(NoOpPasswordEncoder.getInstance())  // Optional, if you want to use plain text passwords
+                .and()
+                .build();
+    }   
+    
+    
     // Security filter chain configuration
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -46,9 +62,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable Cross-Site Request Forgery (CSRF)
                 .cors(cors -> cors.disable())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/public/**").permitAll();
-                    auth.requestMatchers("/api/auth/**").permitAll();
-                    auth.requestMatchers("/api/**").authenticated();
+                    auth.requestMatchers("/api/public/**", "/api/auth/**", "/api/auth/login/**").permitAll(); 
+                    //auth.requestMatchers("/api/**").authenticated();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))

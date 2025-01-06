@@ -51,8 +51,7 @@ http://localhost:8888/api/public
 http://localhost:8888/api/private
 
 http://localhost:8888/api/auth/register
-http://localhost:8888/api/auth/login
-http://localhost:8888/api/auth/token
+http://localhost:8888/api/auth/login 
 
 
 
